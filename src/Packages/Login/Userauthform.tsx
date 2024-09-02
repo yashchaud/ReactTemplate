@@ -17,6 +17,10 @@ import { useForm } from "react-hook-form";
 import { useRef } from "react";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
+import { useFetchData } from "@/fetchcomponents/Fetchapi";
+import { toast } from "sonner";
+import { useQueryClient } from "@tanstack/react-query";
+import { AxiosError } from "axios";
 
 gsap.registerPlugin(useGSAP);
 
@@ -29,10 +33,29 @@ const formSchema = z.object({
 type UserFormValue = z.infer<typeof formSchema>;
 
 export default function UserAuthForm() {
+  const queryClient = useQueryClient();
+  const { data, isLoading, isFetching, isError } = useFetchData({
+    endpoint: "https://66d59c0ff5859a704266c935.mockapi.io/api/todo/todo",
+    params: {
+      queryKey: "todos",
+      retry: 5,
+      refetchOnWindowFocus: true,
+      onSuccess: () => {
+        toast.success("Successfully Fetched Data");
+      },
+      onError: (error: AxiosError) => {
+        toast.error(error.message);
+      },
+    },
+  });
+  useEffect(() => {
+    console.log(data);
+  }, [data]);
+
   const container = useRef<SVGSVGElement | null>(null);
   const { callbackUrl } = useParams();
   //   const callbackUrl = searchParams.get("callbackUrl");
-  const [loading, setLoading] = useState(false);
+  // const [loading, setLoading] = useState(false);
   const defaultValues = {
     email: "demo@gmail.com",
   };
@@ -43,7 +66,8 @@ export default function UserAuthForm() {
 
   const onSubmit = async (data: UserFormValue) => {
     console.log("Done");
-    setLoading(true);
+    queryClient.invalidateQueries({ queryKey: ["todos"] });
+
     // signIn("credentials", {
     //   email: data.email,
     //   callbackUrl: callbackUrl ?? "/dashboard",
@@ -61,7 +85,7 @@ export default function UserAuthForm() {
         duration: 0.3,
       }
     );
-  }, [loading]);
+  }, [isLoading]);
 
   return (
     <>
@@ -81,7 +105,7 @@ export default function UserAuthForm() {
                     <Input
                       type="email"
                       placeholder="Enter your email..."
-                      disabled={loading}
+                      disabled={isLoading}
                       className="min-h-8"
                       {...field}
                     />
@@ -102,7 +126,7 @@ export default function UserAuthForm() {
                     <Input
                       type="email"
                       placeholder="Enter your email..."
-                      disabled={loading}
+                      disabled={isLoading}
                       className=""
                       {...field}
                     />
@@ -114,11 +138,11 @@ export default function UserAuthForm() {
           />
 
           <Button
-            disabled={loading}
+            disabled={isLoading}
             className="ml-auto w-full flex gap-2"
             type="submit"
           >
-            {loading && (
+            {isLoading && (
               <svg
                 ref={container}
                 xmlns="http://www.w3.org/2000/svg"

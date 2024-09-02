@@ -1,24 +1,11 @@
-import axios, { AxiosError, AxiosResponse } from "axios";
+import axios, { AxiosError } from "axios";
 import { useState, useEffect } from "react";
-import {
-  useQuery,
-  UseQueryResult,
-  QueryFunctionContext,
-} from "@tanstack/react-query";
+import { useQuery, UseQueryResult } from "@tanstack/react-query";
 import { toast } from "sonner";
 
-// Define a type for the response data
-
-// Define a type for the custom parameters
-interface ParamsType {
+ interface ParamsType {
   queryKey?: string | string[];
-  headers?:
-    | string
-    | number
-    | boolean
-    | (() => void)
-    | ((error: any) => void)
-    | undefined;
+  headers?: Record<string, string>;
   queryKeyId?: number | string | undefined;
   retry?: number;
   refetchOnWindowFocus?: boolean;
@@ -26,19 +13,15 @@ interface ParamsType {
   onError?: (error: AxiosError) => void;
 }
 
-// Fetch data function
-const fetchData = async ({
+ const fetchData = async ({
   endpoint,
-  customheaders,
+  headers,
 }: {
   endpoint: string;
-  customheaders: <AxiosHeaders>() => void;
+  headers?: Record<string, string>;
 }): Promise<Response> => {
-  let response;
-
-  response = await axios.get<AxiosResponse>(endpoint);
-  // console.log(response.data);
-
+  const config = headers ? { headers } : {};
+  const response = await axios.get<Response>(endpoint, config);
   return response.data;
 };
 
@@ -53,68 +36,34 @@ const useFetchData = ({
   const [customParams, setCustomParams] = useState<ParamsType>({});
 
   useEffect(() => {
-    let newCustomParams: ParamsType = {};
-
-    if (params.queryKey) {
-      newCustomParams.queryKey = `${params.queryKey}`;
-    } else if (params.queryKeyId && params.queryKey) {
-      newCustomParams.queryKey = [`${params.queryKey}`, params.queryKeyId];
-    } else if (!params.queryKey || params.queryKeyId) {
-      newCustomParams.queryKey = [`${endpoint}`, params.queryKeyId];
-    } else {
-      newCustomParams.queryKey = `${endpoint}`;
-    }
-
-    newCustomParams = {
-      ...newCustomParams,
+    const newCustomParams: ParamsType = {
+      queryKey: params.queryKey 
+        ? `${params.queryKey}`
+        : params.queryKeyId
+        ? [`${endpoint}`, params.queryKeyId]
+        : `${endpoint}`,
       retry: params.retry ?? 5,
       refetchOnWindowFocus: params.refetchOnWindowFocus ?? true,
-      onSuccess:
-        params.onSuccess ??
-        (() => {
-          toast.success("Successfully Fetched Data");
-        }),
-      onError:
-        params.onError ??
-        ((error: AxiosError) => {
-          toast.error(error.message);
-        }),
+      onSuccess: params.onSuccess ?? (() => toast.success("Successfully Fetched Data")),
+      onError: params.onError ?? ((error: AxiosError) => toast.error(error.message)),
     };
+    
     setCustomParams(newCustomParams);
-  }, [
-    endpoint,
-    params.queryKey,
-    params.queryKeyId,
-    params.retry,
-    params.refetchOnWindowFocus,
-    // params.onSuccess,
-    // params.onError,
-  ]);
+  }, [endpoint, JSON.stringify(params)]);
 
-  const {
-    data: data,
-    isLoading,
-    isFetching,
-    isError,
-  } = useQuery<Response, AxiosError>({
-    queryKey: [customParams.queryKey],
-
-    queryFn: () => fetchData({ endpoint }),
+  const { data, isLoading, isFetching, isError } = useQuery<Response, AxiosError>({
+    queryKey: Array.isArray(customParams.queryKey) 
+      ? customParams.queryKey 
+      : [customParams.queryKey],
+    queryFn: () => fetchData({ endpoint, headers: params.headers }),
     retry: customParams.retry,
     refetchOnWindowFocus: customParams.refetchOnWindowFocus,
     onSuccess: customParams.onSuccess,
     onError: customParams.onError,
+    staleTime: 5 * 60 * 1000,  // Cache for 5 minutes
   });
 
   return { data, isLoading, isFetching, isError };
 };
 
 export { useFetchData };
-// interface customParams {
-//   querykey: string | string[];
-//   queryKeyId?: string | number;
-//   retry: number;
-//   refetchOnWindowFocus: boolean;
-//   onSuccess?: () => void;
-//   onError?: (error: any) => void;
-// }

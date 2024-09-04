@@ -11,8 +11,21 @@ import { toast } from "sonner";
 import { AxiosError } from "axios";
 
 import { useFetchData } from "@/fetchcomponents/Fetchapi";
+import { usePostData } from "@/fetchcomponents/postapi";
 
 const Login = () => {
+  const { mutate: postData } = usePostData({
+    endpoint: "https://66d59c0ff5859a704266c935.mockapi.io/api/todo/todo",
+    params: {
+      retry: 5,
+      onSuccess: () => {
+        toast.success("Successfully Fetched Data");
+      },
+      onError: (error: AxiosError) => {
+        toast.error(error.message);
+      },
+    },
+  });
   return (
     <div className="relative h-screen flex-col items-center justify-center md:grid lg:max-w-none lg:grid-cols-2 lg:px-0">
       <Link

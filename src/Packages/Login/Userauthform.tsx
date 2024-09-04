@@ -21,6 +21,7 @@ import { useFetchData } from "@/fetchcomponents/Fetchapi";
 import { toast } from "sonner";
 import { useQueryClient } from "@tanstack/react-query";
 import { AxiosError } from "axios";
+import { usePostData } from "@/fetchcomponents/postapi";
 
 gsap.registerPlugin(useGSAP);
 
@@ -48,6 +49,20 @@ export default function UserAuthForm() {
       },
     },
   });
+
+  const postData = usePostData({
+    endpoint: "http://localhost:8000/api/login",
+    params: {
+      retry: 2,
+      onSuccess: () => {
+        toast.success("Successfully Submitted Data");
+      },
+      onError: (error: AxiosError) => {
+        toast.error(error.message);
+      },
+    },
+  });
+
   useEffect(() => {
     console.log(data);
   }, [data]);
@@ -67,7 +82,11 @@ export default function UserAuthForm() {
   const onSubmit = async (data: UserFormValue) => {
     console.log("Done");
     queryClient.invalidateQueries({ queryKey: ["todos"] });
-
+    const dataa = {
+      email: "admin@gmail.com",
+      password: "abcd123",
+    };
+    postData.mutate(dataa);
     // signIn("credentials", {
     //   email: data.email,
     //   callbackUrl: callbackUrl ?? "/dashboard",

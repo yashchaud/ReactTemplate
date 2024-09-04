@@ -41,16 +41,27 @@ const usePostData = ({
   endpoint: string;
   params: ParamsType;
 }): UseMutationResult<AxiosResponse<Response>, AxiosError, RequestData> => {
-  return useMutation<AxiosResponse<Response>, AxiosError, RequestData>(
-    (data) => postData({ endpoint, data, headers: params.headers }),
-    {
-      onSuccess:
-        params.onSuccess ?? (() => toast.success("Data posted successfully")),
-      onError:
-        params.onError ?? ((error: AxiosError) => toast.error(error.message)),
-      retry: params.retry ?? 3,
-    }
-  );
+  // return useMutation<AxiosResponse<Response>, AxiosError, RequestData>(
+  //   (data) => postData({ endpoint, data, headers: params.headers }),
+  //   {
+  //     onSuccess:
+  //       params.onSuccess ?? (() => toast.success("Data posted successfully")),
+  //     onError:
+  //       params.onError ?? ((error: AxiosError) => toast.error(error.message)),
+  //     retry: params.retry ?? 3,
+  //   }
+  // );
+  return useMutation<AxiosResponse<Response>, AxiosError, RequestData>({
+    mutationFn: (data) => postData({ endpoint, data, headers: params.headers }),
+    onSuccess:
+      params.onSuccess ?? (() => toast.success("Data posted successfully")),
+    onError:
+      params.onError ?? ((error: AxiosError) => toast.error(error.message)),
+    retry: params.retry ?? 3,
+    onSettled: (data) => {
+      console.log(data);
+    },
+  });
 };
 
 export { usePostData };

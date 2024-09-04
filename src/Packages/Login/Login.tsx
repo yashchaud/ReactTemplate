@@ -5,7 +5,8 @@ import UserAuthForm from "./Userauthform";
 
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import background from "../../images/backgroundimage.jpg";
+import background from "../../images/next.jpg";
+import Darkbackground from "../../images/darkbackground.jpg";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
 import { AxiosError } from "axios";
@@ -14,18 +15,6 @@ import { useFetchData } from "@/fetchcomponents/Fetchapi";
 import { usePostData } from "@/fetchcomponents/postapi";
 
 const Login = () => {
-  const { mutate: postData } = usePostData({
-    endpoint: "https://66d59c0ff5859a704266c935.mockapi.io/api/todo/todo",
-    params: {
-      retry: 5,
-      onSuccess: () => {
-        toast.success("Successfully Fetched Data");
-      },
-      onError: (error: AxiosError) => {
-        toast.error(error.message);
-      },
-    },
-  });
   return (
     <div className="relative h-screen flex-col items-center justify-center md:grid lg:max-w-none lg:grid-cols-2 lg:px-0">
       <Link
@@ -37,14 +26,17 @@ const Login = () => {
       >
         Login
       </Link>
-      <div className="relative hidden h-full flex-col bg-muted p-10 text-white lg:flex dark:border-r">
+      <div className="relative hidden h-full flex-col bg-muted p-10 text-white lg:flex  ">
         <div
           style={{
             backgroundImage: `url(${background})`,
+            backgroundSize: "cover",
+            backgroundRepeat: "no-repeat",
+            backgroundPosition: "bottom",
           }}
-          className="absolute inset-0"
+          className="absolute inset-0 "
         />
-        <div className="relative z-20 flex items-center text-lg font-medium text-black">
+        <div className="relative z-20 flex items-center text-lg font-medium text-white">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 24 24"
@@ -53,10 +45,10 @@ const Login = () => {
             strokeWidth="2"
             strokeLinecap="round"
             strokeLinejoin="round"
-            className="mr-2 h-6 w-6 text-black"
+            className="mr-2 h-6 w-6 text-white"
           >
             <path
-              className="text-black"
+              className="text-white"
               d="M15 6v12a3 3 0 1 0 3-3H6a3 3 0 1 0 3 3V6a3 3 0 1 0-3 3h12a3 3 0 1 0-3-3"
             />
           </svg>
@@ -64,12 +56,12 @@ const Login = () => {
         </div>
         <div className="relative z-20 mt-auto">
           <blockquote className="space-y-2">
-            <p className="text-lg text-black font-bold">Welcome To Website</p>
-            <footer className="text-sm text-black">Sofia Davis</footer>
+            <p className="text-lg text-white font-bold">Welcome To Website</p>
+            <footer className="text-sm text-white">Sofia Davis</footer>
           </blockquote>
         </div>
       </div>
-      <div className="flex h-full items-center p-4 lg:p-8">
+      <div className="flex h-full items-center p-4 lg:p-8 drop-shadow-md">
         <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
           <div className="flex flex-col space-y-2 text-center">
             <h1 className="text-2xl font-semibold tracking-tight">

@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/ui/customButton";
 import {
   Form,
   FormControl,
@@ -8,7 +8,8 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/custominput";
 import { zodResolver } from "@hookform/resolvers/zod";
 // import { signIn } from "next-auth/react";
 import { useParams } from "react-router-dom";
@@ -44,7 +45,7 @@ export default function UserAuthForm() {
       onSuccess: () => {
         toast.success("Successfully Fetched Data");
       },
-      onError: (error: AxiosError) => {
+      onError: (error) => {
         toast.error(error.message);
       },
     },
@@ -118,10 +119,11 @@ export default function UserAuthForm() {
             name="email"
             render={({ field }) => (
               <FormItem className="">
-                <FormLabel>Email</FormLabel>
+                <Label>Email</Label>
                 <FormControl>
                   <div className="min-h-10 mb-[8rem]">
                     <Input
+                      isLoading={isLoading}
                       type="email"
                       placeholder="Enter your email..."
                       disabled={isLoading}
@@ -143,6 +145,7 @@ export default function UserAuthForm() {
                 <FormControl>
                   <div className="">
                     <Input
+                      isLoading={isLoading}
                       type="email"
                       placeholder="Enter your email..."
                       disabled={isLoading}
@@ -158,8 +161,11 @@ export default function UserAuthForm() {
 
           <Button
             disabled={isLoading}
+            isLoading={isLoading}
             className="ml-auto w-full flex gap-2"
             type="submit"
+            // variant="primaryAccent"
+            variant="primaryAccent"
           >
             {isLoading && (
               <svg

@@ -12,6 +12,7 @@ import store from "@/Redux/sessionSlice";
 import { Provider } from "react-redux";
 import { BrowserRouter } from "react-router-dom";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import { ThemeProvider } from "@/darktheme/CustomTheme";
 
 // Create a new query client
 
@@ -22,7 +23,10 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
     <BrowserRouter>
       <Provider store={store}>
         <React.StrictMode>
-          <App />
+          <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
+            {" "}
+            <App />
+          </ThemeProvider>
         </React.StrictMode>
       </Provider>
     </BrowserRouter>

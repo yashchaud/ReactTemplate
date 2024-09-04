@@ -4,12 +4,28 @@ export default {
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
     extend: {
+      backgroundImage: {
+        lightbg:
+          "radial-gradient(oklch(45.54% 0.162 281.37/0.2), oklch(45.54% 0.162 281.37/0.5))",
+        primaryaccent:
+          "linear-gradient(hsl(var(--primary)), hsl(var(--secondary)/0.4))",
+        secondaryaccent:
+          "radial-gradient(oklch(65.54% 0.162 281.37), oklch(50.07% 0.277 270.83))",
+      },
+      background: {
+        lightps: "hsla(0, 0%, 41%, 1)",
+      },
       borderRadius: {
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",
         sm: "calc(var(--radius) - 4px)",
       },
       colors: {
+        light: "hsl(var(--lightps))",
+        nav: "hsl(var(--secondary)/0.2)",
+        secondarylight: "hsl(var(--secondary)/0.4)",
+        accentmedium: "hsl(var(--accent)/0.6)",
+        accentlight: "hsl(var(--accent)/0.4)",
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
         card: {
@@ -19,6 +35,11 @@ export default {
         popover: {
           DEFAULT: "hsl(var(--popover))",
           foreground: "hsl(var(--popover-foreground))",
+        },
+        primaryAccent: {
+          DEFAULT:
+            "linear-gradient(oklch(86.29% 0.077 185.59), oklch(88.89% 0.159 179.83))",
+          foreground: "hsl(var(--primaryAccent-foreground))",
         },
         primary: {
           DEFAULT: "hsl(var(--primary))",
@@ -50,6 +71,28 @@ export default {
           4: "hsl(var(--chart-4))",
           5: "hsl(var(--chart-5))",
         },
+      },
+      keyframes: {
+        "accordion-down": {
+          from: {
+            height: "0",
+          },
+          to: {
+            height: "var(--radix-accordion-content-height)",
+          },
+        },
+        "accordion-up": {
+          from: {
+            height: "var(--radix-accordion-content-height)",
+          },
+          to: {
+            height: "0",
+          },
+        },
+      },
+      animation: {
+        "accordion-down": "accordion-down 0.2s ease-out",
+        "accordion-up": "accordion-up 0.2s ease-out",
       },
     },
   },

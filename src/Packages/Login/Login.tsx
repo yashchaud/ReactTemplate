@@ -13,8 +13,34 @@ import { AxiosError } from "axios";
 
 import { useFetchData } from "@/fetchcomponents/Fetchapi";
 import { usePostData } from "@/fetchcomponents/postapi";
+import { UseFormHook } from "@/components/ui/HookFormcomp";
 
 const Login = () => {
+  const typeofschema = {
+    email: {
+      name: "email",
+      type: "email",
+      required: true,
+      message: "Please enter your email",
+
+      placeholder: "Enter your email...",
+      className:
+        "w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50",
+      validation: {
+        required: true,
+        message: "Please enter your email",
+        type: "email",
+      },
+      componentType: "Input",
+      componentProps: {
+        type: "email",
+        placeholder: "Enter your email...",
+        className:
+          "w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50",
+      },
+    },
+  };
+
   return (
     <div className="relative h-screen flex-col items-center justify-center md:grid lg:max-w-none lg:grid-cols-2 lg:px-0">
       <Link
@@ -71,7 +97,14 @@ const Login = () => {
               Enter your email below to create your account
             </p>
           </div>
-          <UserAuthForm />
+          {/* <UserAuthForm /> */}
+          <UseFormHook
+            schema={typeofschema}
+            defaultValues={{
+              email: "demo@gmail.com",
+              password: "abcd123",
+            }}
+          />
           <p className="px-8 text-center text-sm text-muted-foreground">
             By clicking continue, you agree to our{" "}
             <Link

@@ -1,12 +1,13 @@
 import React from "react";
 import Sidebar from "@/Dashboard/Sidebar";
+import { TableComponent } from "@/Dashboard/AddComponents/components";
 
 const Dashboard = () => {
   return (
     <div className="flex bg-background">
       <Sidebar />
       <main className="w-full flex-1 overflow-hidden bg-black">
-        <h1>Dashboard</h1>
+        <TableComponent />
       </main>
     </div>
   );

@@ -1,28 +1,26 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
-import { Button, buttonVariants } from "@/components/ui/button";
-import UserAuthForm from "./Userauthform";
-
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import background from "../../images/next.jpg";
-import Darkbackground from "../../images/darkbackground.jpg";
+import { buttonVariants } from "@/components/ui/button";
+import { UseFormHook } from "@/components/ui/HookFormcomp";
+import background from "@/images/backgroundimage.jpg";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
-import { AxiosError } from "axios";
-
-import { useFetchData } from "@/fetchcomponents/Fetchapi";
-import { usePostData } from "@/fetchcomponents/postapi";
-import { UseFormHook } from "@/components/ui/HookFormcomp";
-
 const Login = () => {
+  const defaultValues = {
+    email: "demo@gmail.com",
+    password: "abcd123",
+  };
+  const onSubmit = (data: Record<string, any>) => {
+    console.log(data);
+    toast.success("Successfully Submitted Data");
+  };
+
   const typeofschema = {
     email: {
       name: "email",
       type: "email",
       required: true,
       message: "Please enter your email",
-
       placeholder: "Enter your email...",
       className:
         "w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50",
@@ -38,6 +36,31 @@ const Login = () => {
         className:
           "w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50",
       },
+    },
+    password: {
+      type: "string",
+      required: true,
+      message: "Please enter your password",
+      className:
+        "w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50",
+      componentProps: {
+        type: "password",
+        placeholder: "Enter your password...",
+        className:
+          "w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50",
+      },
+      validation: {
+        required: true,
+        message: "Please enter your password",
+        type: "password",
+      },
+    },
+    confirmPassword: {
+      type: "string",
+      required: false,
+      message: "Please confirm your password",
+      className:
+        "w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50",
     },
   };
 
@@ -97,13 +120,10 @@ const Login = () => {
               Enter your email below to create your account
             </p>
           </div>
-          {/* <UserAuthForm /> */}
           <UseFormHook
             schema={typeofschema}
-            defaultValues={{
-              email: "demo@gmail.com",
-              password: "abcd123",
-            }}
+            defaultValues={defaultValues}
+            onSubmit={onSubmit}
           />
           <p className="px-8 text-center text-sm text-muted-foreground">
             By clicking continue, you agree to our{" "}
